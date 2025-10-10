@@ -1,11 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Strongify (Preliminar 1)</title>
+  <meta name="description" content="Strongify: estructura base y navegación SPA.">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand" role="button" tabindex="0" aria-label="Ir a inicio">
+        <div class="logo" aria-hidden="true"></div>
+        <h1>Strongify</h1>
+      </div>
+      <nav aria-label="Principal">
+        <ul class="nav nav-pc">
+          <li><button class="nav-link active" data-section="inicio">Inicio</button></li>
+          <li><button class="nav-link" data-section="rutina">Rutina</button></li>
+          <li><button class="nav-link" data-section="control">Control</button></li>
+          <li><button class="nav-link" data-section="tienda">Tienda</button></li>
+        </ul>
+        <div class="nav-mobile">
+          <button id="hamburger" aria-expanded="false" aria-controls="mobile-menu" class="btn small ghost">☰</button>
+          <ul id="mobile-menu" class="mobile-menu hidden" role="menu">
+            <li><button role="menuitem" class="nav-link" data-section="inicio">Inicio</button></li>
+            <li><button role="menuitem" class="nav-link" data-section="rutina">Rutina</button></li>
+            <li><button role="menuitem" class="nav-link" data-section="control">Control</button></li>
+            <li><button role="menuitem" class="nav-link" data-section="tienda">Tienda</button></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="inicio" class="section active">
+      <h2>Bienvenido a Strongify</h2>
+      <p class="muted">Versión preliminar 1. Esta vista es estática (placeholders).</p>
+      <div class="kpi">
+        <div class="kpi-item card"><span class="badge">Peso</span><strong>— kg</strong></div>
+        <div class="kpi-item card"><span class="badge">Racha</span><strong>0 días</strong></div>
+        <div class="kpi-item card"><span class="badge">Semana</span><strong>—</strong></div>
+      </div>
+    </section>
+
+    <section id="rutina" class="section hidden">
+      <h2>Rutina</h2>
+      <p class="muted">Próximamente: rutina semanal dinámica.</p>
+      <ul class="list">
+        <li>Lunes: —</li><li>Martes: —</li><li>Miércoles: —</li>
+        <li>Jueves: —</li><li>Viernes: —</li><li>Sábado: —</li><li>Domingo: —</li>
+      </ul>
+    </section>
+
+    <section id="control" class="section hidden">
+      <h2>Control</h2>
+      <p class="muted">Próximamente: formulario de peso/calorías y almacenamiento local.</p>
+    </section>
+
+    <section id="tienda" class="section hidden">
+      <h2>Tienda</h2>
+      <p class="muted">Próximamente: tarjetas de productos.</p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
