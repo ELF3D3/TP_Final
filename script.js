@@ -170,7 +170,7 @@ function renderRutina(){
   const ul = $('#rutina-semanal'); ul.innerHTML = '';
   Object.keys(rutinas).forEach(dia=>{
     const li = document.createElement('li');
-    li.textContent = ${dia}: ${rutinas[dia]};
+    li.textContent = `${dia}: ${rutinas[dia]}`;
     ul.appendChild(li);
   });
 }
@@ -180,8 +180,8 @@ function renderHistorial(){
   const wrap = $('#historial');
   const series = state.series;
   if(series.length===0){ wrap.innerHTML = '<p class="muted">Todavía no hay registros.</p>'; return; }
-  const rows = series.map(s=><tr><td>${s.fecha}</td><td>${s.valor} kg</td><td>${state.kcal[s.fecha] ?? '-'}</td></tr>).join('');
-  wrap.innerHTML = <div class="table"><table><thead><tr><th>Fecha</th><th>Peso</th><th>Calorías</th></tr></thead><tbody>${rows}</tbody></table></div>;
+  const rows = series.map(s=>`<tr><td>${s.fecha}</td><td>${s.valor} kg</td><td>${state.kcal[s.fecha] ?? '-'}</td></tr>`).join('');
+  wrap.innerHTML = `<div class="table"><table><thead><tr><th>Fecha</th><th>Peso</th><th>Calorías</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 function bindControl(){
   $('#form-control').addEventListener('submit', (e)=>{
@@ -198,7 +198,7 @@ function bindControl(){
     const lastDay = localStorage.getItem('lastCheck') || '';
     if(lastDay !== today){ state.racha = (state.racha||0)+1; localStorage.setItem('lastCheck', today); }
 
-    showToast('Guardado ✔');
+    showToast('Guardado ✔️');
     $('#peso-actual').textContent = peso;
     $('#racha').textContent = state.racha;
     renderHistorial();
@@ -211,8 +211,9 @@ function bindControl(){
       state.series = []; state.kcal = {}; state.racha = 0; localStorage.removeItem('lastCheck');
       $('#peso-actual').textContent = '—'; $('#racha').textContent = '0';
       renderHistorial(); renderChart();
-      showToast('Historial borrado 🗑');
+      showToast('Historial borrado 🗑️');
     }
   });
 }
+
 
