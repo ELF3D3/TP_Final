@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Strongify (Preliminar 2)</title>
-  <meta name="description" content="Strongify: rutina dinámica y control con LocalStorage.">
+  <title>Strongify</title>
+  <meta name="description" content="Strongify: rutinas, control de peso y tienda en una SPA simple e interactiva.">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -35,12 +35,12 @@
   </header>
 
   <main class="container">
-    <!-- INICIO -->
+    <!-- INICIO / HERO -->
     <section id="inicio" class="section active">
       <div class="hero">
         <div>
           <span class="hero-badge">🟩 Plan en marcha</span>
-          <h2>Tu día, tu progreso</h2>
+          <h2>Tu día, tu progreso (tranqui, vamos paso a paso)</h2>
           <p>Hoy es <strong id="dia-actual">—</strong>. Te toca: <strong id="rutina-dia">—</strong>.</p>
           <div class="kpi">
             <div class="kpi-item card">
@@ -64,81 +64,11 @@
             <button class="btn ghost" data-section="rutina">Ver rutina</button>
           </div>
         </div>
+        <div class="hero-card">
+          <h3 style="margin:0 0 8px;">Evolución de peso</h3>
+          <div id="chart" class="chart"></div>
+          <small class="muted">Los datos se guardan en tu navegador (LocalStorage).</small>
+        </div>
       </div>
     </section>
-
-    <!-- RUTINA -->
-    <section id="rutina" class="section hidden">
-      <h2>Rutina semanal</h2>
-      <ul id="rutina-semanal" class="list"></ul>
-    </section>
-
-    
-    <!-- CONTROL -->
-    <section id="control" class="section hidden">
-      <h2>Control de calorías y peso</h2>
-      <div class="card" style="margin-bottom:14px;">
-        <form id="form-control" class="form-row" autocomplete="off">
-          <label>
-            <span>Peso (kg)</span><br/>
-            <input type="number" id="peso" step="0.1" min="0" class="input" required />
-          </label>
-          <label>
-            <span>Calorías de hoy</span><br/>
-            <input type="number" id="kcal" min="0" class="input" placeholder="Opcional" />
-          </label>
-          <button type="submit" class="btn">Guardar</button>
-          <button type="button" id="btn-reset" class="btn ghost">Reset historial</button>
-        </form>
-      </div>
-
-      <div class="card">
-        <h3 style="margin-top:0;">Historial</h3>
-        <div id="historial" class="table"></div>
-      </div>
-    </section>
-
-    <!-- TIENDA (placeholder) -->
-    <section id="tienda" class="section hidden">
-      <h2>Tienda de suplementos</h2>
-      <p class="muted">Se implementará en la entrega final.</p>
-    </section>
-  </main>
-
-  <!-- Onboarding -->
-  <div id="onboarding" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="onb-title">
-    <div class="modal">
-      <h3 id="onb-title" style="margin:0 0 10px;">¡Bienvenido a Strongify! 🌿</h3>
-      <p class="muted" style="margin-top:0">Cargá unos datos y arrancamos. Todo queda en tu navegador.</p>
-      <form id="onb-form" class="form-row" autocomplete="off">
-        <label>
-          <span>Tu nombre (opcional)</span><br/>
-          <input type="text" id="onb-nombre" class="input" placeholder="Ej: Luca" />
-        </label>
-        <label>
-          <span>Altura (cm)</span><br/>
-          <input type="number" id="onb-altura" class="input" min="100" max="230" required placeholder="Ej: 175" />
-        </label>
-        <label>
-          <span>Peso actual (kg)</span><br/>
-          <input type="number" id="onb-peso" class="input" step="0.1" min="20" required placeholder="Ej: 78.5" />
-        </label>
-        <label>
-          <span>Objetivo</span><br/>
-          <select id="onb-objetivo" class="input">
-            <option value="perder">Perder grasa</option>
-            <option value="mantener">Mantener</option>
-            <option value="ganar">Ganar masa</option>
-          </select>
-        </label>
-        <button type="submit" class="btn shimmer">Empezar</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Toast -->
-  <div id="toast" class="toast hidden" role="status" aria-live="polite">Guardado ✔</div>
-
-  <script src="app.js"></script>
-</body>
-</html>
+<body>
