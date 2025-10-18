@@ -71,4 +71,45 @@
         </div>
       </div>
     </section>
+        <!-- RUTINA -->
+    <section id="rutina" class="section hidden">
+      <h2>Rutina semanal</h2>
+      <ul id="rutina-semanal" class="list"></ul>
+    </section>
+
+    <!-- CONTROL -->
+    <section id="control" class="section hidden">
+      <h2>Control de calorías y peso</h2>
+      <div class="card" style="margin-bottom:14px;">
+        <form id="form-control" class="form-row" autocomplete="off">
+          <label>
+            <span>Peso (kg)</span><br/>
+            <input type="number" id="peso" step="0.1" min="0" class="input" required />
+          </label>
+          <label>
+            <span>Calorías de hoy</span><br/>
+            <input type="number" id="kcal" min="0" class="input" placeholder="Opcional" />
+          </label>
+          <button type="submit" class="btn">Guardar</button>
+          <button type="button" id="btn-reset" class="btn ghost">Reset historial</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0;">Historial</h3>
+        <div id="historial" class="table"></div>
+      </div>
+    </section>
+
+    <!-- TIENDA -->
+    <section id="tienda" class="section hidden">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+        <h2 style="margin:0;">Tienda de suplementos</h2>
+        <div><span class="badge">Lanzamiento</span></div>
+      </div>
+      <p class="muted">Ofertas pensadas para tu objetivo. Entrás acá si querés verlas; no te vamos a interrumpir.</p>
+      <div class="products" id="products"></div>
+    </section>
+  </main>
+
 <body>
