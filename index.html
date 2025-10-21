@@ -111,5 +111,51 @@
       <div class="products" id="products"></div>
     </section>
   </main>
-
-<body>
+    <!-- Onboarding -->
+    <div id="onboarding" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="onb-title">
+      <div class="modal">
+        <h3 id="onb-title" style="margin:0 0 10px;">¡Bienvenido a Strongify! 🌿</h3>
+        <p class="muted" style="margin-top:0">Nos das dos datos y arrancamos. Nada de cuentas ni mails, queda guardado solo en tu navegador.</p>
+        <form id="onb-form" class="form-row" autocomplete="off">
+          <label>
+            <span>Tu nombre (opcional)</span><br/>
+            <input type="text" id="onb-nombre" class="input" placeholder="Ej: Luca" />
+          </label>
+          <label>
+            <span>Altura (cm)</span><br/>
+            <input type="number" id="onb-altura" class="input" min="100" max="230" required placeholder="Ej: 175" />
+          </label>
+          <label>
+            <span>Peso actual (kg)</span><br/>
+            <input type="number" id="onb-peso" class="input" step="0.1" min="20" required placeholder="Ej: 78.5" />
+          </label>
+          <label>
+            <span>Objetivo</span><br/>
+            <select id="onb-objetivo" class="input">
+              <option value="perder">Perder grasa</option>
+              <option value="mantener">Mantener</option>
+              <option value="ganar">Ganar masa</option>
+            </select>
+          </label>
+          <button type="submit" class="btn shimmer">Empezar</button>
+        </form>
+        <small class="muted">Nota del equipo: armamos esto con cariño para que te resulte simple y humano. Cualquier cosa, chiflás.</small>
+      </div>
+    </div>
+  
+  <!-- Modal producto -->
+  <div id="modal-root" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+        <h3 id="modal-title" style="margin:0;">Detalle de producto</h3>
+        <button id="modal-close" class="btn small ghost">Cerrar</button>
+      </div>
+      <div id="modal-content" style="margin-top:10px;"></div>
+    </div>
+  </div>
+  
+    <!-- Toast -->
+    <div id="toast" class="toast hidden" role="status" aria-live="polite">Guardado ✔️</div>
+    <script src="app.js"></script>
+  </body>
+</html>

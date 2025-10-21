@@ -216,4 +216,204 @@ function bindControl(){
   });
 }
 
+// ===== Chart SVG =====
+function renderChart(){
+  const mount = $('#chart'); mount.innerHTML = '';
+  const data = state.series;
+  if(data.length<2){
+    mount.innerHTML = '<p class="muted">Cargá al menos 2 registros para ver la curva.</p>';
+    return;
+  }
+  const W = mount.clientWidth || 480, H = mount.clientHeight || 220;
+  const pad = 28;
+  const xs = data.map((d,i)=>i);
+  const ys = data.map(d=>d.valor);
+  const minY = Math.min(...ys)*0.98, maxY = Math.max(...ys)*1.02;
+  const scaleX = i => pad + (i/(xs.length-1))*(W-2*pad);
+  const scaleY = y => H - pad - ((y - minY)/(maxY - minY))*(H-2*pad);
 
+  let d = '';
+  xs.forEach((x,i)=>{
+    const X = scaleX(x), Y = scaleY(ys[i]);
+    d += (i===0?`M ${X},${Y}`:` L ${X},${Y}`);
+  });
+
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('width', W); svg.setAttribute('height', H); svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+  const grid = document.createElementNS(svgNS, 'g'); grid.setAttribute('stroke', '#00000015');
+  for(let i=0;i<5;i++){
+    const y = pad + i*((H-2*pad)/4);
+    const line = document.createElementNS(svgNS, 'line');
+    line.setAttribute('x1', pad); line.setAttribute('x2', W-pad);
+    line.setAttribute('y1', y); line.setAttribute('y2', y);
+    grid.appendChild(line);
+  }
+  svg.appendChild(grid);
+
+  const area = document.createElementNS(svgNS, 'path');
+  area.setAttribute('d', d + ` L ${scaleX(xs.at(-1))},${H-pad} L ${scaleX(xs[0])},${H-pad} Z`);
+  area.setAttribute('fill', '#22c55e33');
+  svg.appendChild(area);
+
+  const path = document.createElementNS(svgNS, 'path');
+  path.setAttribute('d', d);
+  path.setAttribute('fill', 'none');
+  path.setAttribute('stroke', '#16a34a');
+  path.setAttribute('stroke-width', '3');
+  path.setAttribute('stroke-linecap','round');
+  svg.appendChild(path);
+
+  xs.forEach((x,i)=>{
+    const dot = document.createElementNS(svgNS, 'circle');
+    dot.setAttribute('cx', scaleX(x));
+    dot.setAttribute('cy', scaleY(ys[i]));
+    dot.setAttribute('r', 4);
+    dot.setAttribute('fill', '#14532d');
+    svg.appendChild(dot);
+  });
+
+  mount.appendChild(svg);
+}
+
+// ===== Toast =====
+function showToast(msg){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.remove('hidden');
+  setTimeout(()=> t.classList.add('hidden'), 1800);
+}
+
+// ===== Tienda =====
+function renderProductos(){
+  const grid = $('#products'); grid.innerHTML='';
+  productos.forEach(p=>{
+    const card = document.createElement('article');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <img class="prod-img" src="${p.img}" alt="${p.nombre}" onerror="this.style.background='linear-gradient(135deg,#22c55e33,#14532d33)'; this.removeAttribute('src');">
+      <h3 style="margin:.6rem 0 .2rem">${p.nombre}</h3>
+      <div class="price">${formatMoney(p.precio)}</div>
+      <small class="muted">Envío a todo el país</small>
+    `;
+    card.addEventListener('click', ()=> openModal(p));
+    grid.appendChild(card);
+  });
+}
+
+function openModal(prod){
+  const root = document.getElementById('modal-root');
+  const content = document.getElementById('modal-content');
+  document.getElementById('modal-title').textContent = prod.nombre;
+
+  const images = (prod.imgs && prod.imgs.length) ? prod.imgs
+               : (prod.img ? [prod.img] : []);
+
+  content.innerHTML = `
+    <div class="modal-grid">
+      <div class="modal-visual">
+        <img id="modal-main" class="prod-img" referrerpolicy="no-referrer"
+             src="${images[0] || ''}" alt="${prod.nombre}"
+             loading="eager" decoding="async"
+             onerror="this.style.background='linear-gradient(135deg,#22c55e33,#14532d33)'; this.removeAttribute('src');">
+        <div class="thumbs">
+          ${images.map((src, i) => `
+            <img class="thumb ${i===0 ? 'active' : ''}" referrerpolicy="no-referrer"
+                 data-src="${src}" alt="Vista ${i+1}" loading="lazy" decoding="async">
+          `).join('')}
+        </div>
+      </div>
+      <div class="modal-info">
+        <p>${prod.desc || ''}</p>
+        <p class="price" style="margin:.5rem 0">${formatMoney(prod.precio)}</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn shimmer" onclick="showToast('Agregado al carrito 🛒')">Agregar al carrito</button>
+          <button class="btn ghost" onclick="showToast('Compra rápida no disponible en demo')">Comprar ahora</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Miniaturas
+  const main = content.querySelector('#modal-main');
+  content.querySelectorAll('.thumb').forEach(thumb => {
+    thumb.src = thumb.dataset.src;
+    thumb.onerror = function(){
+      this.style.background='linear-gradient(135deg,#22c55e33,#14532d33)';
+      this.removeAttribute('src');
+    };
+    thumb.addEventListener('click', () => {
+      main.src = thumb.dataset.src;
+      content.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+    });
+  });
+
+  // Abrir modal + bloquear scroll de fondo + foco
+  root.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  const modalEl = root.querySelector('.modal');
+  if (modalEl) {
+    modalEl.setAttribute('tabindex','-1');
+    modalEl.focus();
+  }
+
+  // Cerrar con ESC
+  document.addEventListener('keydown', handleEscClose);
+}
+
+function closeModal(){
+  const root = document.getElementById('modal-root');
+  root.classList.add('hidden');
+  document.body.style.overflow = ''; // restaurar scroll
+  document.removeEventListener('keydown', handleEscClose);
+}
+
+function handleEscClose(e){
+  if(e.key === 'Escape') closeModal();
+}
+
+function bindModal(){
+  $('#modal-close').addEventListener('click', closeModal);
+  $('#modal-root').addEventListener('click', (e)=>{
+    if(e.target.id === 'modal-root') closeModal();
+  });
+}
+
+// ===== Init =====
+function init(){
+  bindNav();
+  bindHamburger();
+  bindControl();
+  bindModal();
+  bindOnboarding();
+
+  renderHoy();
+  renderRutina();
+  renderHistorial();
+  renderProductos();
+
+  if(state.peso) $('#peso-actual').textContent = state.peso;
+  $('#racha').textContent = state.racha;
+  renderChart();
+
+  // Onboarding gate
+  if(needsOnboarding()){
+    openOnboarding();
+  } else {
+    try{
+      const p = JSON.parse(localStorage.getItem('perfil')||'null');
+      if(p && p.nombre){
+        const h2 = document.querySelector('#inicio h2');
+        const imc = calcIMC(state.peso, p.alturaCm);
+        h2.innerHTML = `Hola ${p.nombre}, tu día, tu progreso (tranqui, vamos paso a paso)`;
+        if(imc){ document.getElementById('semana-resumen').textContent = `IMC aprox: ${imc}`; }
+      }
+    }catch{}
+  }
+
+  const hash = (location.hash||'').replace('#','');
+  if(hash && $('#'+hash)) setActive(hash);
+}
+document.addEventListener('DOMContentLoaded', init);
